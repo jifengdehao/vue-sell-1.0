@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="format-detection" content="email=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- ios7.0版本以后，safari上已看不到效果 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <!-- 可选default、black、black-translucent -->
+    <title>sell</title>
+    <link rel="icon" href="https://cn.vuejs.org/images/logo.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="static/css/reset.css">
+  </head>
+  <script type="text/javascript">
+    (function (doc, win) {
+      var docEl = doc.documentElement,
+        // orientationchange 事件是在用户水平或者垂直翻转设备（即方向发生变化）时触发的事件。
+        // onresize 事件会在窗口或框架被调整大小时发生。
+        resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+        recalc = function () {
+          window.clientWidth = docEl.clientWidth;
+          if (!window.clientWidth) return;
+          docEl.style.fontSize = 40 * (window.clientWidth / 640) + 'px';
+          window.base = 40 * (window.clientWidth / 640);
+        };
+      if (!doc.addEventListener) return;
+      win.addEventListener(resizeEvt, recalc, false);
+      // DOMContentLoaded火狐特有的事件，DOM加载完后触发
+      doc.addEventListener('DOMContentLoaded', recalc, false);
+    })(document, window);
+  </script>
+  <body>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>
