@@ -15,6 +15,11 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
+  /**
+   * 子组件 和父组件通信
+   * 子组件通过派发事件 $dispatch
+   *
+   */
   const POSITIVE = 0
   const NEGATIVE = 1
   const ALL = 2

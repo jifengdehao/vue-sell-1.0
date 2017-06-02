@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-header :seller="seller"></v-header>
+    <v-header :seller="seller" keep-alive></v-header>
     <div class="tab border-1px">
       <div class="tab-item">
         <a v-link="{path:'/goods'}">商品</a>
@@ -13,7 +13,7 @@
       </div>
     </div>
     <!-- route outlet -->
-    <router-view :seller="seller" ></router-view>
+    <router-view :seller="seller" keep-alive></router-view>
   </div>
 </template>
 
@@ -23,15 +23,21 @@
    * Object.assign()Object.assign() 方法用于将所有可枚举的属性的值从一个或多个源对象复制到目标对象。它将返回目标对象。
    */
   import header from 'components/header/header'
+  import {urlParse} from 'common/js/util'
   const ERR_OK = 0
   export default {
     data () {
       return {
-        seller: {}
+        seller: {
+          id: (() => {
+            let queryParam = urlParse()
+            return queryParam.id
+          })()
+        }
       }
     },
     created () {
-      this.$http.get('/api/seller').then((response) => {
+      this.$http.get('/api/seller?id=' + this.seller.id).then((response) => {
         response = response.body
         if (response.errno === ERR_OK) {
           this.seller = Object.assign({}, this.seller, response.data)

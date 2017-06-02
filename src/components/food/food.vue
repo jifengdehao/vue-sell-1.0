@@ -31,9 +31,10 @@
       <split v-show="food.info"></split>
       <div class="rating">
         <h2 class="title">商品评价</h2>
-        <ratingselect :only-content="onlyContent" :select-type="selectType" :desc="desc" :ratings="food.ratings"></ratingselect>
+        <ratingselect :only-content="onlyContent" :select-type="selectType" :desc="desc"
+                      :ratings="food.ratings"></ratingselect>
         <div class="rating-wrapper">
-          <ul v-show="food.ratings && food.ratings.length">
+          <ul v-if="food.ratings && food.ratings.length">
             <li v-show="needShow(rating.rateType,rating.text)" v-for="rating in food.ratings"
                 class="rating-item border-1px">
               <div class="user">
@@ -42,12 +43,13 @@
               </div>
               <div class="time">{{rating.rateTime | formatDate}}</div>
               <p class="text">
-                <span :class="{'icon-thumb_up':rating.rateType===0,'icon-thumb_down':rating.rateType===1}"></span>{{rating.text}}
+                <span
+                  :class="{'icon-thumb_up':rating.rateType===0,'icon-thumb_down':rating.rateType===1}"></span>{{rating.text}}
               </p>
             </li>
           </ul>
           <!--没有评价显示-->
-          <div class="no-rating" v-show="!food.ratings || !food.ratings.length">暂无评价</div>
+          <div class="no-rating" v-if="!food.ratings || !food.ratings.length">暂无评价</div>
         </div>
       </div>
     </div>
@@ -59,6 +61,11 @@
   import Vue from 'vue'
   import split from 'components/split/split'
   import ratingselect from 'components/ratingselect/ratingselect'
+  import {formatDate} from 'common/js/date'
+  /**
+   * needShow(type ,text) 过滤类型 和 文本
+   *
+   */
   const ALL = 2
   export default {
     props: {
@@ -81,6 +88,8 @@
     methods: {
       show () {
         this.showFlag = true
+        this.selectType = ALL
+        this.onlyContent = true
         this.$nextTick(() => {
           if (!this.scroll) {
             this.scroll = new BScroll(this.$els.food, {
@@ -112,6 +121,12 @@
         }
       }
     },
+    filters: {
+      formatDate (time) {
+        let date = new Date(time)
+        return formatDate(date, 'yyyy-MM-dd hh:mm')
+      }
+    },
     components: {
       cartcontrol,
       split,
@@ -120,9 +135,15 @@
     events: {
       'ratingtype.select' (type) {
         this.selectType = type
+        this.$nextTick(() => {
+          this.scroll.refresh()
+        })
       },
       'content.toggle' (onlyContent) {
         this.onlyContent = onlyContent
+        this.$nextTick(() => {
+          this.scroll.refresh()
+        })
       }
     }
   }
@@ -135,6 +156,7 @@
     left 0
     top 0
     bottom 2.4rem
+    right 0
     z-index 30
     width 100%
     background #fff
